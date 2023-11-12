@@ -15,6 +15,7 @@ import {
   uniqueNamesGenerator,
 } from 'unique-names-generator';
 import {useQuery, useRealm} from '@realm/react';
+import {useNavigation} from '@react-navigation/native';
 
 type personType = {
   id?: number;
@@ -27,6 +28,7 @@ const DBComponent = () => {
   const [data, setData] = useState<personType[] | null>();
   const [nameToEdit, setNameToEdit] = useState<string | undefined>('');
   const [person, setPerson] = useState<personType | null>({id: 0, name: ''});
+  const navigation = useNavigation();
 
   const onPressAddData = () => {
     realm.write(() => {
@@ -60,6 +62,10 @@ const DBComponent = () => {
   const onPressCurrentItem = (item: personType) => () => {
     setNameToEdit(item.name);
     setPerson(item);
+  };
+
+  const onPressGoToHymns = () => {
+    navigation.navigate('Hymns' as never);
   };
 
   const renderItem = (item: personType, index: number) => {
@@ -115,6 +121,9 @@ const DBComponent = () => {
           <Text>Extract filtered data</Text>
         </Pressable>
         {updateDataForm()}
+        <Pressable onPress={onPressGoToHymns} style={styles.button}>
+          <Text>Go to Hymns</Text>
+        </Pressable>
       </View>
     );
   };
