@@ -10,6 +10,8 @@ import {
 import {HymnsData} from '../assets';
 import {useQuery, useRealm} from '@realm/react';
 import {Hymn} from '../schemas/Hymn';
+import {MainData} from '../schemas/Main';
+import {History} from '../schemas/History';
 
 const HymnsComponent = () => {
   const realm = useRealm();
@@ -48,7 +50,10 @@ const HymnsComponent = () => {
           return realm.create('History', {
             position: historyItem.position,
             timestamp: historyItem.timestamp,
-            verse: realm.create('Verse', historyItem.verse),
+            verse: realm.create('Verse', {
+              ...historyItem.verse,
+              searchableContent: normalizeString(historyItem.verse.content),
+            }),
           });
         });
 
@@ -89,13 +94,23 @@ const HymnsComponent = () => {
       'history.verse.content CONTAINS[c] $0',
       normalizedText,
     );
-    console.log('Results:', result.length);
     // @ts-ignore
     setSearchResult(result as Hymn[]);
   };
 
-  const renderItem = ({item}: {item: Hymn}) => {
-    return <Text>{item.title}</Text>;
+  const onPressHymnName = (hymn: MainData) => () => {
+    console.log(hymn.history);
+    Array.from(hymn.history).map(item => {
+      console.log(item.verse.content);
+    });
+  };
+
+  const renderItem = ({item}: {item: MainData}) => {
+    return (
+      <Pressable onPress={onPressHymnName(item)}>
+        <Text>{item.title}</Text>
+      </Pressable>
+    );
   };
 
   const listResult = () => {
