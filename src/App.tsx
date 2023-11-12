@@ -19,6 +19,8 @@ import {
 
 import {Colors, Header} from 'react-native/Libraries/NewAppScreen';
 import {DB} from './components/DB';
+import {RealmProvider} from '@realm/react';
+import {PersonSchema} from './schemas/Schema';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -58,26 +60,28 @@ function App(): JSX.Element {
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="DB">Hymns DB.</Section>
-        </View>
-        <View style={styles.sectionContainer}>
-          <DB />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <RealmProvider schema={[PersonSchema]}>
+      <SafeAreaView style={backgroundStyle}>
+        <StatusBar
+          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+          backgroundColor={backgroundStyle.backgroundColor}
+        />
+        <ScrollView
+          contentInsetAdjustmentBehavior="automatic"
+          style={backgroundStyle}>
+          <Header />
+          <View
+            style={{
+              backgroundColor: isDarkMode ? Colors.black : Colors.white,
+            }}>
+            <Section title="DB">Hymns DB.</Section>
+          </View>
+          <View style={styles.sectionContainer}>
+            <DB />
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </RealmProvider>
   );
 }
 
