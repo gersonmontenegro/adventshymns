@@ -1,79 +1,11 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+This is a project which pretends to be a digital hymnary for (at least initially) the adventist hymns.
 
-# Getting Started
+At the moment of write this lines is still in construction, and there is no hurry to finish soon, because I use my free time to complete it.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+To store the data, I'm using Realm SDK, a MondgoBD library to perform actions such as insert data, edit data, remove data, and query data very fast. Actually, I'm using it as state management and the performance is awesome, so, this project doesn't use Redux or similar solutions to preserve data.
 
-## Step 1: Start the Metro Server
+Realm is "offline first", and that solves lot of problems. Is reactive, and "easy" to use.
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+There is a file inside the project. [DB.tsx](https://github.com/gersonmontenegro/adventshymns/blob/main/src/components/DB.tsx), which has some basic operations if you want to see how Realm works.
 
-To start Metro, run the following command from the _root_ of your React Native project:
-
-```bash
-# using npm
-npm start
-
-# OR using Yarn
-yarn start
-```
-
-## Step 2: Start your Application
-
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
-
-### For Android
-
-```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
-```
-
-### For iOS
-
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
-
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+Another file, [Hymns.tsx](https://github.com/gersonmontenegro/adventshymns/blob/main/src/screens/Hymns.tsx), has more complex operations, because is in charge to load the database based in a file with all the hymns: [hymns.json](https://github.com/gersonmontenegro/adventshymns/blob/main/src/assets/bd/hymns.json). That file insert the whole dataset, and, until now, search by title, and search hymns by the content of the verse, which is quite useful when you're in the church.
