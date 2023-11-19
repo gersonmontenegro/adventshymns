@@ -1,4 +1,4 @@
-import React, {memo, useState} from 'react';
+import React, {memo, useCallback, useEffect, useState} from 'react';
 import {
   FlatList,
   Pressable,
@@ -7,101 +7,34 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import {HymnsData} from '../assets';
-import {useQuery, useRealm} from '@realm/react';
+import {useQuery} from '@realm/react';
 import {Hymn} from '../schemas/Hymn';
 import {MainData} from '../schemas/Main';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../types/types';
+import {RootStackParamList} from '../utils/types';
+import {normalizeString} from '../utils/helpers';
 
 const HymnsComponent = () => {
-  const realm = useRealm();
-  const hymns = useQuery('Hymn');
   const mainData = useQuery('MainData');
-  const [searchText, setSearchText] = useState<string>('');
   const [searchTextByVerse, setSearchTextByVerse] = useState<string>('');
-  const [searchResult, setSearchResult] = useState<Hymn[]>([]);
+  const [searchResult, setSearchResult] = useState<MainData[]>([]);
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  const button = (onPressEvent: any, title: string) => {
-    return (
-      <Pressable onPress={onPressEvent} style={styles.button}>
-        <Text>{title}</Text>
-      </Pressable>
-    );
-  };
-
-  const onPressReadHymns = () => {
-    HymnsData.map(item => {
-      console.log(item.number, item.title);
-    });
-  };
-
-  const normalizeString = (str: string) =>
-    str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-
-  const onPressInsertHymns = () => {
-    HymnsData.map(entryData => {
-      realm.write(() => {
-        const hymn = realm.create('Hymn', {
-          ...entryData.hymn,
-          searchableTitle: normalizeString(entryData.hymn.title),
-        });
-
-        const historyObjects = entryData.history.map(historyItem => {
-          return realm.create('History', {
-            position: historyItem.position,
-            timestamp: historyItem.timestamp,
-            verse: realm.create('Verse', {
-              ...historyItem.verse,
-              searchableContent: normalizeString(historyItem.verse.content),
-            }),
-          });
-        });
-
-        realm.create('MainData', {
-          id: entryData.id,
-          number: entryData.number,
-          title: entryData.title,
-          searchableTitle: normalizeString(entryData.title),
-          hymn,
-          history: historyObjects,
-        });
-        // console.log('Inserted:', entryData.number);
-      });
-    });
-  };
-
-  const onPressRemoveData = () => {
-    realm.write(() => {
-      realm.deleteAll();
-      console.log('data removed');
-    });
-  };
-
-  const onPressSearchHymn = () => {
-    console.log('looking for:', normalizeString(searchText));
-    const normalizedText = normalizeString(searchText);
-    const result = hymns.filtered(
-      `searchableTitle CONTAINS[c] "${normalizedText}"`,
-    );
-    // @ts-ignore
-    setSearchResult(result as Hymn[]);
-  };
-
-  const onPressSearchHymnByVerse = () => {
-    console.log('looking for:', normalizeString(searchText));
+  const onPressSearchHymnByVerse = useCallback(() => {
+    console.log('lets search!', searchTextByVerse);
     const normalizedText = normalizeString(searchTextByVerse);
     const result = mainData.filtered(
-      'history.verse.content CONTAINS[c] $0',
+      '(searchableTitle CONTAINS[c] $0) OR (history.verse.content CONTAINS[c] $1)',
+      normalizedText,
       normalizedText,
     );
+    console.log(result.length);
     // @ts-ignore
     setSearchResult(result as Hymn[]);
-  };
+  }, [mainData, searchTextByVerse]);
 
   const onPressHymnName = (hymn: MainData) => () => {
     navigation.navigate('HymnDetail', {hymn});
@@ -109,7 +42,10 @@ const HymnsComponent = () => {
 
   const renderItem = ({item}: {item: MainData}) => {
     return (
-      <Pressable onPress={onPressHymnName(item)} style={styles.hymnButton}>
+      <Pressable
+        onPress={onPressHymnName(item)}
+        style={styles.hymnButton}
+        key={`${item.number}-${item.title}`}>
         <View style={styles.hymnNumberContainer}>
           <Text>{item.number}</Text>
         </View>
@@ -121,7 +57,6 @@ const HymnsComponent = () => {
   };
 
   const listResult = () => {
-    // @ts-ignore
     return <FlatList data={searchResult} renderItem={renderItem} />;
   };
 
@@ -145,14 +80,13 @@ const HymnsComponent = () => {
     );
   };
 
+  useEffect(() => {
+    onPressSearchHymnByVerse();
+  }, [onPressSearchHymnByVerse]);
+
   return (
     <View style={styles.container}>
-      <Text>Manage DB</Text>
-      {button(onPressReadHymns, 'Read hymns')}
-      {button(onPressInsertHymns, 'Insert hymns')}
-      {button(onPressRemoveData, 'Remove data')}
-      {button(onPressSearchHymn, 'Search data')}
-      {searchDataForm(onPressSearchHymn, 'Search', searchText, setSearchText)}
+      <Text>Hymn List</Text>
       {searchDataForm(
         onPressSearchHymnByVerse,
         'Search by verse',

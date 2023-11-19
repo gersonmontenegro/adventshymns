@@ -21,4 +21,5 @@ export interface MainData {
   searchableTitle: string;
   hymn: Hymn;
   history: History[];
+  length: number;
 }

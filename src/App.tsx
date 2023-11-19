@@ -17,55 +17,12 @@ import {HistorySchema} from './schemas/History';
 import {VerseSchema} from './schemas/Verse';
 import {NavigationContainer} from '@react-navigation/native';
 import {MainNavigation} from './navigation/MainNavigation';
-// import {migration} from './schemas/migration';
-
-// import Realm from 'realm';
-
-// const openRealm = async () => {
-//   return await Realm.open({
-//     schema: [
-//       PersonSchema,
-//       MainDataSchema,
-//       HymnSchema,
-//       HistorySchema,
-//       VerseSchema,
-//     ],
-//     schemaVersion: 2,
-//     migration,
-//   });
-// };
 
 function App(): JSX.Element {
-  // const [realm, setRealm] = useState(null);
   const isDarkMode = useColorScheme() === 'dark';
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
-
-  // useEffect(() => {
-  //   let isActive = true;
-  //   openRealm().then(openedRealm => {
-  //     if (isActive) {
-  //       setRealm(openedRealm);
-  //     }
-  //   });
-
-  //   return () => {
-  //     isActive = false;
-  //     if (realm) {
-  //       // @ts-ignore
-  //       realm.close();
-  //     }
-  //   };
-  // }, []);
-
-  // if (!realm) {
-  //   return (
-  //     <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
-  //       <Text>Loading...</Text>
-  //     </View>
-  //   );
-  // }
 
   return (
     <RealmProvider

@@ -1,4 +1,4 @@
-import {MainData} from './../schemas/Main';
+import {MainData} from '../schemas/Main';
 
 export type RootStackParamList = {
   Demo: undefined;
