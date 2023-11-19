@@ -11,6 +11,9 @@ import {HymnsData} from '../assets';
 import {useQuery, useRealm} from '@realm/react';
 import {Hymn} from '../schemas/Hymn';
 import {MainData} from '../schemas/Main';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../types/types';
 
 const HymnsComponent = () => {
   const realm = useRealm();
@@ -19,6 +22,9 @@ const HymnsComponent = () => {
   const [searchText, setSearchText] = useState<string>('');
   const [searchTextByVerse, setSearchTextByVerse] = useState<string>('');
   const [searchResult, setSearchResult] = useState<Hymn[]>([]);
+
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const button = (onPressEvent: any, title: string) => {
     return (
@@ -98,21 +104,24 @@ const HymnsComponent = () => {
   };
 
   const onPressHymnName = (hymn: MainData) => () => {
-    console.log(hymn.history);
-    Array.from(hymn.history).map(item => {
-      console.log(item.verse.content);
-    });
+    navigation.navigate('HymnDetail', {hymn});
   };
 
   const renderItem = ({item}: {item: MainData}) => {
     return (
-      <Pressable onPress={onPressHymnName(item)}>
-        <Text>{item.title}</Text>
+      <Pressable onPress={onPressHymnName(item)} style={styles.hymnButton}>
+        <View style={styles.hymnNumberContainer}>
+          <Text>{item.number}</Text>
+        </View>
+        <View style={styles.hymnNameContainer}>
+          <Text>{item.title}</Text>
+        </View>
       </Pressable>
     );
   };
 
   const listResult = () => {
+    // @ts-ignore
     return <FlatList data={searchResult} renderItem={renderItem} />;
   };
 
@@ -191,6 +200,15 @@ const styles = StyleSheet.create({
   inputEditContainer: {
     flexDirection: 'row',
     marginVertical: 2,
+  },
+  hymnButton: {
+    flexDirection: 'row',
+  },
+  hymnNumberContainer: {
+    width: 40,
+  },
+  hymnNameContainer: {
+    flex: 1,
   },
 });
 
