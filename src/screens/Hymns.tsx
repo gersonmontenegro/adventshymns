@@ -11,7 +11,6 @@ import {HymnsData} from '../assets';
 import {useQuery, useRealm} from '@realm/react';
 import {Hymn} from '../schemas/Hymn';
 import {MainData} from '../schemas/Main';
-import {History} from '../schemas/History';
 
 const HymnsComponent = () => {
   const realm = useRealm();
