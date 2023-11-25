@@ -68,12 +68,7 @@ const HymnsComponent = () => {
     return <FlatList data={searchResult} renderItem={renderItem} />;
   };
 
-  const searchDataForm = (
-    onPressEvent: any,
-    title: string,
-    value: string,
-    onChangeText: any,
-  ) => {
+  const searchDataForm = (value: string, onChangeText: any) => {
     return (
       <View style={styles.inputEditContainer}>
         <TextInput
@@ -81,9 +76,6 @@ const HymnsComponent = () => {
           value={value}
           onChangeText={text => onChangeText(text)}
         />
-        <Pressable style={styles.editButton} onPress={onPressEvent}>
-          <Text>{title}</Text>
-        </Pressable>
       </View>
     );
   };
@@ -95,12 +87,7 @@ const HymnsComponent = () => {
   return (
     <View style={styles.container}>
       <Text>{`Hymn List (${searchResult.length})`}</Text>
-      {searchDataForm(
-        onPressSearchHymnByVerse,
-        'Search',
-        searchTextByVerse,
-        setSearchTextByVerse,
-      )}
+      {searchDataForm(searchTextByVerse, setSearchTextByVerse)}
       {listResult()}
     </View>
   );
@@ -133,7 +120,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Courier',
   },
   input: {
-    width: '60%',
+    width: '100%',
     height: 40,
     backgroundColor: 'lightgray',
     borderRadius: 5,

@@ -11,9 +11,9 @@ const HymnDetailComponent = () => {
     hymn: {history, title},
   } = route.params;
 
-  const renderHistory = ({verse}: {verse: Verse}) => {
+  const renderHistory = ({verse, index}: {verse: Verse; index: number}) => {
     return (
-      <View style={styles.verseContainer}>
+      <View style={styles.verseContainer} key={index}>
         <Text style={styles.verse}>{verse.content}</Text>
       </View>
     );
