@@ -9,6 +9,7 @@ export const MainDataSchema = {
     number: 'int',
     title: 'string',
     searchableTitle: 'string',
+    searchableNumber: 'string',
     hymn: 'Hymn', // Link to HymnSchema
     history: 'History[]', // Array of History items
   },
@@ -19,6 +20,7 @@ export interface MainData {
   number: number;
   title: string;
   searchableTitle: string;
+  searchableNumber: string;
   hymn: Hymn;
   history: History[];
   length: number;

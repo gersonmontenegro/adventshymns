@@ -5,6 +5,7 @@ export const HymnSchema = {
     number: 'int',
     title: 'string',
     searchableTitle: 'string',
+    searchableNumber: 'string',
     mp3Url: 'string',
     mp3UrlInstr: 'string',
     mp3Filename: 'string',
@@ -16,6 +17,7 @@ export interface Hymn {
   number: number;
   title: string;
   searchableTitle: string;
+  searchableNumber: string;
   mp3Url: string;
   mp3UrlInstr: string;
   mp3Filename: string;

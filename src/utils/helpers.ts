@@ -9,6 +9,7 @@ export const insertHymns = (realm: any) => {
       const hymn = realm.create('Hymn', {
         ...entryData.hymn,
         searchableTitle: normalizeString(entryData.hymn.title),
+        searchableNumber: entryData.hymn.number.toString(),
       });
 
       const historyObjects = entryData.history.map(historyItem => {
@@ -27,6 +28,7 @@ export const insertHymns = (realm: any) => {
         number: entryData.number,
         title: entryData.title,
         searchableTitle: normalizeString(entryData.title),
+        searchableNumber: entryData.number.toString(),
         hymn,
         history: historyObjects,
       });

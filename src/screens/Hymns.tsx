@@ -24,14 +24,22 @@ const HymnsComponent = () => {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const onPressSearchHymnByVerse = useCallback(() => {
-    console.log('lets search!', searchTextByVerse);
     const normalizedText = normalizeString(searchTextByVerse);
-    const result = mainData.filtered(
-      '(searchableTitle CONTAINS[c] $0) OR (history.verse.content CONTAINS[c] $1)',
-      normalizedText,
-      normalizedText,
-    );
-    console.log(result.length);
+    let result;
+
+    if (!isNaN(parseInt(searchTextByVerse, 10))) {
+      // searchTextByVerse can be a part of a number, search in the number field
+      result = mainData.filtered(
+        'searchableNumber CONTAINS[c] $0',
+        normalizedText,
+      );
+    } else {
+      result = mainData.filtered(
+        '(searchableTitle CONTAINS[c] $0) OR (history.verse.content CONTAINS[c] $1)',
+        normalizedText,
+        normalizedText,
+      );
+    }
     // @ts-ignore
     setSearchResult(result as Hymn[]);
   }, [mainData, searchTextByVerse]);
@@ -86,10 +94,10 @@ const HymnsComponent = () => {
 
   return (
     <View style={styles.container}>
-      <Text>Hymn List</Text>
+      <Text>{`Hymn List (${searchResult.length})`}</Text>
       {searchDataForm(
         onPressSearchHymnByVerse,
-        'Search by verse',
+        'Search',
         searchTextByVerse,
         setSearchTextByVerse,
       )}

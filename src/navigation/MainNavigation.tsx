@@ -9,8 +9,8 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const MainNavigation = () => (
   <Stack.Navigator screenOptions={{headerShown: false}}>
-    <Stack.Screen name="Hymns" component={Hymns} />
     <Stack.Screen name="Demo" component={Demo} />
+    <Stack.Screen name="Hymns" component={Hymns} />
     <Stack.Screen name="HymnDetail" component={HymnDetail} />
   </Stack.Navigator>
 );
